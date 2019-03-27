@@ -1,0 +1,2 @@
+# Bioinformatics
+This repository is used to share ideas, concepts, approaches and possible solutions of tasks from the course Bioinformatics I of BB17 @ Technical University of Applied Sciences Wildau.
