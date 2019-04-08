@@ -15,14 +15,14 @@ input = np.random.randint(0,10,size=(size,size))
 def find_path(matrix, goal):
     cost_matrix = [[0 for x in range(goal[0])] for y in range(goal[1])]
     path = [[0 for x in range(goal[0])] for y in range(goal[1])]
-    cost_matrix[0][0] = matrix[0][0]
-    path[0][0] = (0,0)
 
     try:
         # getting minimal cost for all cells
         for i in range(0,goal[0]):
             for j in range(0,goal[1]):
                 if j == 0 and i == 0:
+                    cost_matrix[0][0] = matrix[0][0]
+                    path[0][0] = (0,0)
                     continue
                 if i == 0:
                     leftCost = cost_matrix[0][j-1]
