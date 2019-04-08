@@ -1,8 +1,14 @@
 # define the input matrix in the following format
-input = [   [3,7,1,5],
-            [6,9,2,10],
-            [11,5,37,3],
-            [2,3,1,0] ]
+# input = [   [3,7,1,5],
+#             [6,9,2,10],
+#             [11,5,37,3],
+#             [2,3,1,0] ]
+
+import numpy as np
+
+size = int(input("Welche Größe soll die Matrix besitzen?"))
+
+input = np.random.randint(0,10,size=(size,size))
 
 # method that gets the matrix and a cell coordinate and 
 # returns the minimal cost with the corresponding path 
@@ -66,6 +72,5 @@ def find_path(matrix, goal):
     #     print(row)
     # for row in path:
     #     print(row)
-find_path(input,(4,4)) # method gets matrix and goal
-
+find_path(input,(size,size)) # method gets matrix and goal
     
