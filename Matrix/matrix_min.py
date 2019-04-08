@@ -39,15 +39,15 @@ def find_path(matrix, goal):
                     aboveCost = cost_matrix[i][j-1] + 10
                     diagonalCost = cost_matrix[i-1][j-1]
                 
-                if min(leftCost, aboveCost, diagonalCost) == leftCost:
-                    cost_matrix[i][j] = matrix[i][j] + leftCost
-                    path[i][j] = (i-1,j)
-                elif min(leftCost, aboveCost, diagonalCost) == aboveCost:
-                    cost_matrix[i][j] = matrix[i][j] + aboveCost
-                    path[i][j] = (i,j-1)
-                else:
-                    cost_matrix[i][j] = matrix[i][j] + diagonalCost
-                    path[i][j] = (i-1,j-1)
+                    if min(leftCost, aboveCost, diagonalCost) == leftCost:
+                        cost_matrix[i][j] = matrix[i][j] + leftCost
+                        path[i][j] = (i-1,j)
+                    elif min(leftCost, aboveCost, diagonalCost) == aboveCost:
+                        cost_matrix[i][j] = matrix[i][j] + aboveCost
+                        path[i][j] = (i,j-1)
+                    else:
+                        cost_matrix[i][j] = matrix[i][j] + diagonalCost
+                        path[i][j] = (i-1,j-1)
 
     #getting the shortest path from the path matrix
         x = goal[0]-1
