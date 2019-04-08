@@ -19,24 +19,25 @@ def find_path(matrix, goal):
     path[0][0] = (0,0)
 
     try:
-    #getting minimal cost of first column
-        for i in range(1,goal[0]):
-            aboveCost = cost_matrix[i-1][0]
-            cost_matrix[i][0] = aboveCost + matrix[i][0]  + 10
-            path[i][0] = (i-1,0)
-        
-        #getting minimal cost of first row
-        for j in range(1,goal[1]):
-            leftCost = cost_matrix[0][j-1]
-            cost_matrix[0][j] = leftCost + matrix[0][j]  + 10
-            path[0][j] = (0,j-1)
-        
-        #getting minimal cost for the other cells
-        for i in range(1,goal[0]):
-            for j in range(1,goal[1]):
-                leftCost = cost_matrix[i-1][j] + 10
-                aboveCost = cost_matrix[i][j-1] + 10
-                diagonalCost = cost_matrix[i-1][j-1]
+        # getting minimal cost for all cells
+        for i in range(0,goal[0]):
+            for j in range(0,goal[1]):
+                if j == 0 and i == 0:
+                    continue
+                if i == 0:
+                    leftCost = cost_matrix[0][j-1]
+                    cost_matrix[0][j] = leftCost + matrix[0][j]  + 10
+                    path[0][j] = (0,j-1)
+                    continue
+                elif j == 0:
+                    aboveCost = cost_matrix[i-1][0]
+                    cost_matrix[i][0] = aboveCost + matrix[i][0]  + 10
+                    path[i][0] = (i-1,0)
+                    continue
+                else:
+                    leftCost = cost_matrix[i-1][j] + 10
+                    aboveCost = cost_matrix[i][j-1] + 10
+                    diagonalCost = cost_matrix[i-1][j-1]
                 
                 if min(leftCost, aboveCost, diagonalCost) == leftCost:
                     cost_matrix[i][j] = matrix[i][j] + leftCost
