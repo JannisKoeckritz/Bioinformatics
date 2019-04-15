@@ -29,31 +29,33 @@ def createMatrix(s=10,varianz=10):
     return np.array(np.random.randint(0,varianz+1,size=(int(s),int(s))))
 
 #Function creates scoring matrix with the same size as matrix created above. All cells get th same value ("*")
-def createHomoMatrix(s=10,value=99999999):
+def createHomoMatrix(s=10,value="*"):
     return [[value for x in range(0,s)] for y in range(0,s)]
 
 #Core function. Works through recursion.
 def calcValue(x,y,value):
-    if x == 0 and y ==0: #
+    if x == 0 and y ==0: #abort criterion, start-point is reached
         scores[y][x]=maze[y][x]
         value=0
     else:
-        if y >0 and x >0:
+        if y >0 and x >0: #cell within the matrix
             if scores[y][x]=="*":
+                #calculate value of neighbours
                 value=min(calcValue(x,y-1,value)[2],calcValue(x-1,y,value)[2],calcValue(x-1,y-1,value)[2])
+                #save minimal score
                 scores[y][x]=value+maze[y][x]
             else: value=scores[y][x]
-        elif x == 0:
+        elif x == 0: #cell on the left border
             if scores[y][0]=="*":
                 value=calcValue(x,y-1,value)[2]
                 scores[y][0]=value+maze[y][0]
             else: value=scores[y][0]
-        elif y == 0:
+        elif y == 0: #cell on the top border
             if scores[0][x]=="*":
                 value= calcValue(x-1,y,value)[2]
                 scores[0][x]=value+maze[0][x]
             else: value=scores[0][x]
-    posValue=value+maze[y][x]
+    posValue=value+maze[y][x]#value of current position
     return [x,y,posValue]
 
 maze=createMatrix(int(isize),int(ivar))
