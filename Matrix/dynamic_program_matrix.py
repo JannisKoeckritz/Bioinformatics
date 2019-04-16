@@ -59,12 +59,12 @@ def calcValue(x,y,value):
     return [x,y,posValue]
 
 maze=createMatrix(int(isize),int(ivar))
-print(maze)
+print(maze,"\n")
 scores=createHomoMatrix(int(isize),"*")
 time1=time.time()
 calcValue(len(maze)-1,len(maze)-1,0)
 time2=time.time()
 
-for zeile in scores:
-    print(zeile)
+for line in scores:
+    print(line)
 print("Duration: ",time2-time1)
