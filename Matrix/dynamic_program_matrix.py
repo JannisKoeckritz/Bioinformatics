@@ -1,7 +1,7 @@
-import random
 import time
 import argparse
 import numpy as np
+import sys
 
 """
 The following block allows to pass the arguments 'size' (-s/--size) and 'variance' (-v/--variance) 
@@ -23,6 +23,7 @@ try:
     int(ivar)
 except ValueError:
     print("Please enter a valid number")
+    sys.exit(0)
 
 #Function creates random matrix with optional parameters (size and variance) 
 def createMatrix(s=10,varianz=10):
@@ -67,4 +68,4 @@ time2=time.time()
 
 for line in scores:
     print(line)
-print("Duration: ",time2-time1)
+print("Duration: ",(time2-time1)*1000,"ms")
