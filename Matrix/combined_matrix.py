@@ -4,7 +4,6 @@ import numpy as np
 import sys
 import resource
 from memory_profiler import profile
-import psutil
 import os
 import matplotlib.pyplot as plt
 
@@ -120,10 +119,7 @@ if test == False:
     if "i" in ipro:
         scores_it = createMatrix(isize,ivar,f=None)
         path_it = createMatrix(isize,ivar,f=None )
-        timet1 = time.time()
         iterative((int(isize),int(isize)),int(isize))
-        timet2 = time.time()
-        print("Dauer: ",timet2-timet1)
         print("\n Score iterativ: \n")
         print(scores_it)
         pit = findPath((int(isize),int(isize)),path_it,scores_it)
@@ -147,7 +143,7 @@ if test == False:
 else:
     avg_time_it = []
     avg_time_rec = []
-    for i in range(10,800,20):
+    for i in range(10,1100,40):
         matrix = createMatrix(i,10)
         scores_it = createMatrix(i,10,f=None)
         path_it = createMatrix(i,10,f=None)
@@ -155,7 +151,7 @@ else:
         iterative((int(i),int(i)),int(i))
         timet2 = time.time()
         avg_time_it.append(timet2-timet1)
-    for j in range(10,100,20):
+    for j in range(10,1100,40):
         matrix = createMatrix(j,10)
         scores_rec = createMatrix(j,10,f=None)
         path_rec = createMatrix(j,10,f=None)
@@ -164,7 +160,7 @@ else:
         timer2 = time.time()
         avg_time_rec.append(timer2-timer1)
     x_werte=[]
-    for x in range(10,800,20):
+    for x in range(10,1100,40):
         x_werte.append(x)
     print(x_werte, len(x_werte))
     print(avg_time_rec, len(avg_time_rec))
