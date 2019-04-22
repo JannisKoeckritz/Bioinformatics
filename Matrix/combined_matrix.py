@@ -2,8 +2,7 @@ import time
 import argparse
 import numpy as np
 import sys
-import resource
-from memory_profiler import profile
+from memory_profiler import profile, memory_usage
 import psutil
 import matplotlib.pyplot as plt
 '''run memory analysis with "mprof run --python python3 combined_matrix.py" '''
@@ -21,6 +20,7 @@ try:
 except ValueError:
     print("Please enter a valid character")
     sys.exit(0)
+
 
 #@profile
 def createMatrix(s,variance=ivar,f=0):
@@ -65,11 +65,11 @@ def iterative(goal,size=10):
                     else:
                         scores_it[i][j] = matrix[i][j] + diagonalCost
                         path_it[i][j] = (i-1,j-1)
-file = open("rekursiv.log","w+")
-@profile(precision=5,stream=file)
+
+# file = open("beamter.log","w+")
+# @profile(precision=2,stream=file)
 def recursive(x,y,value,score):
     global matrix
-
     if score[y][x]!= None:
         return score[y][x]
     else:
@@ -126,10 +126,10 @@ if test == False:
         scores_rec = createMatrix(isize,ivar,f=None)
         path_rec = createMatrix(isize,ivar,f=None)
         recursive(int(isize)-1,int(isize)-1,0,scores_rec)
-        #print("\n Score rekursiv: \n")
-        #print(scores_rec)
+        print("\n Score rekursiv: \n")
+        print(scores_rec)
         prec = findPath((int(isize),int(isize)),path_rec,scores_rec)
-        #print('\n Der minimale Aufwand beträgt {}, bei folgendem Weg: \n {} '.format(str(scores_rec[int(isize)-1][int(isize)-1]),prec))
+        print('\n Der minimale Aufwand beträgt {}, bei folgendem Weg: \n {} '.format(str(scores_rec[int(isize)-1][int(isize)-1]),prec))
     if "ir" in ipro or "ri" in ipro:
         if pit == prec:
             print("Pfade sind gleich")
@@ -138,24 +138,32 @@ if test == False:
 else:
     avg_time_it = []
     avg_time_rec = []
-    for i in range(10,1100,40):
+    avg_mem_it = []
+    avg_mem_rec = []
+    for i in range(10,1100,60):
         matrix = createMatrix(i,10)
         scores_it = createMatrix(i,10,f=None)
         path_it = createMatrix(i,10,f=None)
         timet1 = time.time()
+        t1 = memory_usage(-1)
         iterative((int(i),int(i)),int(i))
+        t2 = memory_usage(-1)
         timet2 = time.time()
+        avg_mem_it.append(t2[0]-t1[0])
         avg_time_it.append(timet2-timet1)
-    for j in range(10,1100,40):
+    for j in range(10,1100,60):
         matrix = createMatrix(j,10)
         scores_rec = createMatrix(j,10,f=None)
         path_rec = createMatrix(j,10,f=None)
         timer1 = time.time()
+        m1 = memory_usage(-1)[0]
         recursive(int(j)-1,int(j)-1,0,scores_rec)
+        m2= memory_usage(-1)[0]
         timer2 = time.time()
+        avg_mem_rec.append(m2-m1)
         avg_time_rec.append(timer2-timer1)
     x_werte=[]
-    for x in range(10,1100,40):
+    for x in range(10,1100,60):
         x_werte.append(x)
     print(x_werte, len(x_werte))
     print("Rekursiv: ",avg_time_rec)
@@ -163,7 +171,14 @@ else:
     plt.scatter(x_werte,avg_time_rec,c='r',label="rekursiv")
     plt.scatter(x_werte,avg_time_it,c='g',label="iterativ")
     plt.xlabel("Größe der Matrix")
-    plt.ylabel("Dauer in sec")
+    plt.ylabel("Dauer [s]")
     plt.title("Laufzeitanalyse rekursiver und iterativer Algorithmus")
+    plt.legend(loc="upper left")
+    plt.show()
+    plt.scatter(x_werte,avg_mem_rec,c="r",label="rekursiv")
+    plt.scatter(x_werte,avg_mem_it,c="g",label="iterativ")
+    plt.xlabel("Größe der Matrix")
+    plt.ylabel("Speicherverbrauch [MiB]")
+    plt.title("Speicheranalyse rekursiver und iterativer Algorithmus")
     plt.legend(loc="upper left")
     plt.show()
