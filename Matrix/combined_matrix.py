@@ -4,9 +4,9 @@ import numpy as np
 import sys
 import resource
 from memory_profiler import profile
-import os
+import psutil
 import matplotlib.pyplot as plt
-
+'''run memory analysis with "mprof run --python python3 combined_matrix.py" '''
 parser = argparse.ArgumentParser(description='Get information about matrix')
 parser.add_argument('-p','--process',help='Process', required=False, default="ir")
 parser.add_argument('-s','--size',help='Size', required=False, default=int(10))
@@ -22,20 +22,18 @@ except ValueError:
     print("Please enter a valid character")
     sys.exit(0)
 
-# @profile
+#@profile
 def createMatrix(s,variance=ivar,f=0):
     if f == None:
         return np.full((int(s),int(s)),f)
     return np.array(np.random.randint(0,int(variance)+1,size=(int(s),int(s))),dtype=np.int64)
 
-# @profile
+# file = open("iterativ.log","w+")
+# @profile(precision=5,stream=file)
 def iterative(goal,size=10):
     global matrix
     global scores_it
     global path_it
-
-    #print("\n ITERATIV:",resource.getrusage(resource.RUSAGE_SELF))
-    #print("\n RLIMIT_DATA:",resource.RLIMIT_DATA)
 
     for i in range(0,goal[0]):
             for j in range(0,goal[1]):
@@ -67,8 +65,8 @@ def iterative(goal,size=10):
                     else:
                         scores_it[i][j] = matrix[i][j] + diagonalCost
                         path_it[i][j] = (i-1,j-1)
-
-# @profile
+file = open("rekursiv.log","w+")
+@profile(precision=5,stream=file)
 def recursive(x,y,value,score):
     global matrix
 
@@ -100,7 +98,7 @@ def recursive(x,y,value,score):
             score[y][x]=value+matrix[0][x]
     return score[y][x]
 
-# @profile
+#@profile
 def findPath(goal,path,score):
     global matrix
     x,y = goal[0]-1, goal[1]-1
@@ -124,17 +122,14 @@ if test == False:
         print(scores_it)
         pit = findPath((int(isize),int(isize)),path_it,scores_it)
         print('\n Der minimale Aufwand beträgt {}, bei folgendem Weg: \n {} '.format(str(scores_it[int(isize)-1][int(isize)-1]),pit))
-
     if "r" in ipro:
         scores_rec = createMatrix(isize,ivar,f=None)
         path_rec = createMatrix(isize,ivar,f=None)
         recursive(int(isize)-1,int(isize)-1,0,scores_rec)
-        print("\n Score rekursiv: \n")
-        print(scores_rec)
+        #print("\n Score rekursiv: \n")
+        #print(scores_rec)
         prec = findPath((int(isize),int(isize)),path_rec,scores_rec)
-        print('\n Der minimale Aufwand beträgt {}, bei folgendem Weg: \n {} '.format(str(scores_rec[int(isize)-1][int(isize)-1]),prec))
-
-
+        #print('\n Der minimale Aufwand beträgt {}, bei folgendem Weg: \n {} '.format(str(scores_rec[int(isize)-1][int(isize)-1]),prec))
     if "ir" in ipro or "ri" in ipro:
         if pit == prec:
             print("Pfade sind gleich")
@@ -163,12 +158,12 @@ else:
     for x in range(10,1100,40):
         x_werte.append(x)
     print(x_werte, len(x_werte))
-    print(avg_time_rec, len(avg_time_rec))
     print("Rekursiv: ",avg_time_rec)
+    print("Iterativ: ",avg_time_it)
     plt.scatter(x_werte,avg_time_rec,c='r',label="rekursiv")
     plt.scatter(x_werte,avg_time_it,c='g',label="iterativ")
-    plt.xlabel("Size of matrix")
-    plt.ylabel("Duration in sec")
+    plt.xlabel("Größe der Matrix")
+    plt.ylabel("Dauer in sec")
     plt.title("Laufzeitanalyse rekursiver und iterativer Algorithmus")
     plt.legend(loc="upper left")
     plt.show()
