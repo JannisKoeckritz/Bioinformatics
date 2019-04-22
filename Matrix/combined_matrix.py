@@ -5,7 +5,7 @@ import sys
 from memory_profiler import profile, memory_usage
 import psutil
 import matplotlib.pyplot as plt
-'''run memory analysis with "mprof run --python python3 combined_matrix.py" '''
+
 parser = argparse.ArgumentParser(description='Get information about matrix')
 parser.add_argument('-p','--process',help='Process', required=False, default="ir")
 parser.add_argument('-s','--size',help='Size', required=False, default=int(10))
@@ -21,15 +21,11 @@ except ValueError:
     print("Please enter a valid character")
     sys.exit(0)
 
-
-#@profile
 def createMatrix(s,variance=ivar,f=0):
     if f == None:
         return np.full((int(s),int(s)),f)
     return np.array(np.random.randint(0,int(variance)+1,size=(int(s),int(s))),dtype=np.int64)
 
-# file = open("iterativ.log","w+")
-# @profile(precision=5,stream=file)
 def iterative(goal,size=10):
     global matrix
     global scores_it
@@ -66,8 +62,6 @@ def iterative(goal,size=10):
                         scores_it[i][j] = matrix[i][j] + diagonalCost
                         path_it[i][j] = (i-1,j-1)
 
-# file = open("beamter.log","w+")
-# @profile(precision=2,stream=file)
 def recursive(x,y,value,score):
     global matrix
     if score[y][x]!= None:
@@ -98,7 +92,6 @@ def recursive(x,y,value,score):
             score[y][x]=value+matrix[0][x]
     return score[y][x]
 
-#@profile
 def findPath(goal,path,score):
     global matrix
     x,y = goal[0]-1, goal[1]-1
